@@ -15,7 +15,9 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat "python --version"  // Pour s'assurer que Python est dispo
+                // Vérification de la version de Python
+                bat 'python --version'
+
                 script {
                     if (fileExists('requirements.txt')) {
                         bat 'pip install -r requirements.txt'
@@ -26,27 +28,29 @@ pipeline {
 
         stage('Run Retirement Model') {
             steps {
-                bat "python ${PYTHON_SCRIPT}"
+                bat "python ${env.PYTHON_SCRIPT}"
             }
         }
 
-       // stage('Archive Results') {
-          //  steps {
-          //      archiveArtifacts artifacts: "${CSV_OUTPUT}", allowEmptyArchive: true
-          //  }
-      //  }
+        // Si tu veux activer l'archivage plus tard :
+        // stage('Archive Results') {
+        //     steps {
+        //         archiveArtifacts artifacts: "${env.CSV_OUTPUT}", allowEmptyArchive: true
+        //     }
+        // }
 
-      //  stage('Notify') {
-        //    steps {
-         //       script {
-          //          if (currentBuild.result == 'FAILURE') {
-           //             echo 'Le calcul des départs à la retraite a échoué.'
-            //        } else {
-              //          echo 'Le calcul des départs à la retraite a réussi.'
-               //     }
-              //  }
-          //  }
-     //   }
+        // Et la notification, désactivée pour l'instant :
+        // stage('Notify') {
+        //     steps {
+        //         script {
+        //             if (currentBuild.result == 'FAILURE') {
+        //                 echo 'Le calcul des départs à la retraite a échoué.'
+        //             } else {
+        //                 echo 'Le calcul des départs à la retraite a réussi.'
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     post {
