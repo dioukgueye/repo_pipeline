@@ -1,0 +1,57 @@
+pipeline {
+    agent any
+
+    environment {
+        PYTHON_SCRIPT = 'tp_creation_jenkinsfile.py'
+        CSV_OUTPUT = 'retirement_predictions.csv'
+    }
+
+    stages {
+        stage('Clone Repository') {
+            steps {
+                git 'https://github.com/dioukgueye/repo_pipeline.git'
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                bat "python --version"  // Pour s'assurer que Python est dispo
+                script {
+                    if (fileExists('requirements.txt')) {
+                        bat 'pip install -r requirements.txt'
+                    }
+                }
+            }
+        }
+
+        stage('Run Retirement Model') {
+            steps {
+                bat "python ${PYTHON_SCRIPT}"
+            }
+        }
+
+        stage('Archive Results') {
+            steps {
+                archiveArtifacts artifacts: "${CSV_OUTPUT}", allowEmptyArchive: true
+            }
+        }
+
+        stage('Notify') {
+            steps {
+                script {
+                    if (currentBuild.result == 'FAILURE') {
+                        echo 'Le calcul des départs à la retraite a échoué.'
+                    } else {
+                        echo 'Le calcul des départs à la retraite a réussi.'
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline terminé.'
+        }
+    }
+}
