@@ -13,10 +13,16 @@ pipeline {
             }
         }
 
+        stage('Check PATH') {
+            steps {
+                bat 'echo %PATH%'  // Affiche la variable PATH pour vérifier si cmd et python y sont
+            }
+        }
+
         stage('Check Python') {
             steps {
-                bat 'where python'
-                bat 'python --version'
+                bat 'where python'  // Vérifie où python est installé
+                bat 'python --version'  // Vérifie la version de Python
             }
         }
 
