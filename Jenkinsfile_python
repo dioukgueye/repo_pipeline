@@ -30,28 +30,28 @@ pipeline {
             }
         }
 
-        stage('Archive Results') {
-            steps {
-                archiveArtifacts artifacts: "${CSV_OUTPUT}", allowEmptyArchive: true
-            }
-        }
+       // stage('Archive Results') {
+          //  steps {
+          //      archiveArtifacts artifacts: "${CSV_OUTPUT}", allowEmptyArchive: true
+          //  }
+      //  }
 
-        stage('Notify') {
-            steps {
-                script {
-                    if (currentBuild.result == 'FAILURE') {
-                        echo 'Le calcul des départs à la retraite a échoué.'
-                    } else {
-                        echo 'Le calcul des départs à la retraite a réussi.'
-                    }
-                }
-            }
-        }
+      //  stage('Notify') {
+        //    steps {
+         //       script {
+          //          if (currentBuild.result == 'FAILURE') {
+           //             echo 'Le calcul des dÃ©parts Ã  la retraite a Ã©chouÃ©.'
+            //        } else {
+              //          echo 'Le calcul des dÃ©parts Ã  la retraite a rÃ©ussi.'
+               //     }
+              //  }
+          //  }
+     //   }
     }
 
     post {
         always {
-            echo 'Pipeline terminé.'
+            echo 'Pipeline terminÃ©.'
         }
     }
 }
